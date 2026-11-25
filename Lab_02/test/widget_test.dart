@@ -29,6 +29,12 @@ void main() {
 
       await _tapText(tester, 'Створити акаунт');
       expect(find.text('Реєстрація'), findsOneWidget);
+      await tester.enterText(find.byType(TextFormField).at(0), 'Андрій');
+      await tester.enterText(
+        find.byType(TextFormField).at(1),
+        'andrii@example.com',
+      );
+      await tester.enterText(find.byType(TextFormField).at(2), 'secret123');
       await _tapText(tester, 'Створити обліковий запис');
 
       expect(find.text('Мій розумний дім'), findsOneWidget);
@@ -43,4 +49,34 @@ void main() {
       expect(find.text('Увійти'), findsOneWidget);
     });
   }
+
+  testWidgets('login validates email and password', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const SmartHomeApp());
+
+    await tester.enterText(find.byType(TextFormField).at(0), 'invalid-email');
+    await tester.enterText(find.byType(TextFormField).at(1), '123');
+    await _tapText(tester, 'Увійти');
+
+    expect(find.text('Введіть коректну електронну пошту'), findsOneWidget);
+    expect(
+      find.text('Пароль має містити щонайменше 6 символів'),
+      findsOneWidget,
+    );
+    expect(find.text('Ваш дім — під контролем'), findsOneWidget);
+  });
+
+  testWidgets('registration validates required fields', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const SmartHomeApp());
+    await _tapText(tester, 'Створити акаунт');
+    await _tapText(tester, 'Створити обліковий запис');
+
+    expect(find.text('Введіть ім’я'), findsOneWidget);
+    expect(find.text('Введіть електронну пошту'), findsOneWidget);
+    expect(find.text('Введіть пароль'), findsOneWidget);
+    expect(find.text('Реєстрація'), findsOneWidget);
+  });
 }
