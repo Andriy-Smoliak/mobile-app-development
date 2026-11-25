@@ -46,3 +46,14 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Android generated files in all lab folders
+**/.gradle/
+**/.kotlin/
+
+# iOS generated files in all lab folders
+**/Flutter/ephemeral/
+
+# Flutter generated files
+**/.dart_tool/
+**/build/
